@@ -16,13 +16,3 @@ python monitor.py --api-url https://api.example.com/data
 
 If validation fails, an adaptive card is sent to Teams via the configured
 webhook.
-
-## Using a real API
-
-Pass the API endpoint with `--url` to test live data. Any JSON API will do,
-including public services like [jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com)
-or your own mock endpoints.
-
-```bash
-python monitor.py --url https://jsonplaceholder.typicode.com/todos/1
-```
