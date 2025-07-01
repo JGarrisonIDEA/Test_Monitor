@@ -13,10 +13,12 @@ TEAMS_WEBHOOK = (
     "&sv=1.0&sig=CeyLTWbKgyRWRigW3k4fVWAPBOkk_WAqPFKpve4MC88"
 )
 
+def fetch_data():
 def fetch_data(url=API_URL):
     if requests is None:
         raise RuntimeError("The 'requests' package is required to fetch data")
 
+    response = requests.get(API_URL, timeout=10)
     response = requests.get(url, timeout=10)
     response.raise_for_status()
     return response.json()
@@ -43,15 +45,7 @@ def validate_data(data):
         return False
     if not isinstance(quantity, int):
         return False
-    if not isinstance(price, (float, int, str)) or not _has_two_decimal_places(price):
-        return False
-
-    return True
-
-def send_teams_message(message):
-    if requests is None:
-        print(f"[Teams message not sent] {message}")
-        return
+@@ -55,50 +55,56 @@ def send_teams_message(message):
 
     payload = {
         "attachments": [
@@ -77,11 +71,13 @@ def send_teams_message(message):
     }
     requests.post(TEAMS_WEBHOOK, json=payload)
 
+def monitor(filepath=None):
 def monitor(filepath=None, api_url=API_URL):
     try:
         if filepath:
             data = load_json_file(filepath)
         else:
+            data = fetch_data()
             data = fetch_data(api_url)
     except Exception as e:
         send_teams_message(f"API call failed: {e}")
@@ -107,4 +103,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    monitor(args.file)
     monitor(args.file, args.url)

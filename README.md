@@ -8,6 +8,12 @@ data from an API or load a JSON file for testing.
 python monitor.py --file bad_data.json
 ```
 
+Override the default API endpoint with `--api-url`:
+
+```bash
+python monitor.py --api-url https://api.example.com/data
+```
+
 If validation fails, an adaptive card is sent to Teams via the configured
 webhook.
 
