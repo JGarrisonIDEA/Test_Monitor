@@ -13,11 +13,11 @@ TEAMS_WEBHOOK = (
     "&sv=1.0&sig=CeyLTWbKgyRWRigW3k4fVWAPBOkk_WAqPFKpve4MC88"
 )
 
-def fetch_data():
+def fetch_data(api_url=API_URL):
     if requests is None:
         raise RuntimeError("The 'requests' package is required to fetch data")
 
-    response = requests.get(API_URL, timeout=10)
+    response = requests.get(api_url, timeout=10)
     response.raise_for_status()
     return response.json()
 
@@ -77,12 +77,12 @@ def send_teams_message(message):
     }
     requests.post(TEAMS_WEBHOOK, json=payload)
 
-def monitor(filepath=None):
+def monitor(filepath=None, api_url=API_URL):
     try:
         if filepath:
             data = load_json_file(filepath)
         else:
-            data = fetch_data()
+            data = fetch_data(api_url)
     except Exception as e:
         send_teams_message(f"API call failed: {e}")
         return
@@ -99,6 +99,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--file", dest="file", help="Path to JSON file containing test data"
     )
+    parser.add_argument(
+        "--api-url",
+        dest="api_url",
+        help="API endpoint URL. Defaults to API_URL constant if omitted",
+    )
     args = parser.parse_args()
 
-    monitor(args.file)
+    monitor(args.file, api_url=args.api_url or API_URL)
