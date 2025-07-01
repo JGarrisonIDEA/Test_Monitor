@@ -11,7 +11,7 @@ python monitor.py --file bad_data.json
 Override the default API endpoint with `--api-url`:
 
 ```bash
-python monitor.py --api-url https://api.example.com/data
+python monitor.py --api-url https://a23c30a5-a1d1-49e4-abf7-f244af23174a.mock.pstmn.io/data
 ```
 
 If validation fails, an adaptive card is sent to Teams via the configured
